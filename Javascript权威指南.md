@@ -119,3 +119,137 @@ for(var i = 0 ; i< arr.length; a[i++] = 0 ) ;
 ```  
 javascript循环体中至少包含一条语句. 所以,这里只用了一个分号来表示一条空语句.
 
+### 3. 声明语句  
+var(*es6 let const*) 和 function 都是声明语句, 他们声明变量或者函数. 这些语句定义标识符(变量名和函数名)并给其赋值  
+#### 3.1 var  
+用var定义的变量无法通过delete删除  
+如果只声明,未进行赋值操作,那么变量的初始值为undefined(*在es6中,建议在声明变量的时候就对其进行赋值操作*)  
+>提升   
+
+对变量和函数的声明会被提升至**当前作用域**的顶端,赋值及其他的操作则不会. (***函数优先** 函数会先于变量被提升*)  
+声明本身会被提升，但不是赋值，即便是函数表达式的赋值，也 不会 被提升
+#### 3.2 函数 function  
+```
+    //函数表达式
+    var foo = function() {
+        console.log(1);
+    }
+    //函数声明式
+    function foo() {
+        console.log(1);
+    }
+
+    //递归函数
+    function factorial(n) {
+        if(N < 1) return 1;
+        return n * factorial(n -1);
+    }
+```  
+避免在块中声明函数  
+### 4. 条件语句  
+条件语句是通过判断指定表达式的值来决定执行还是跳过某些语句  
+#### 4.1 if  
+```
+ if(true) console.log(1);  
+ //当在if语句后只跟一条语句时,不需要写花括号.  当有多条语句需要执行时, 用花括号将多条语句合并成一条
+```  
+#### 4.2 switch  
+```
+switch(exp) {
+    case 1:      //表达式exp === 1 ,从这里开始执行
+        //代码块1
+        break;   //停止执行switch语句
+    case 2: 
+        //代码块2
+        break;
+    //...
+    default:    //如果所有条件都不匹配, 执行default
+        //代码块..
+        break;
+}
+
+//另外一种思路
+    switch (true) {
+        case true :    //如果为真, 从这里开始执行
+            //代码块1
+            break;
+        case true ：
+            //代码块2
+            break;
+    }
+```  
+break语句可以使解释器跳出switch语句或循环语句  
+### 5. 循环  
+#### 5.1 while  
+```
+while(exp)
+    //...
+```  
+#### 5.2 do while  
+```
+//do while循环 至少会执行一次
+do 
+    //...
+while(exp)
+```  
+#### 5.3 for  
+```
+for(var i = 0; i < arr.length; i++){
+    //.....
+}
+
+{
+    let i, j;
+    for(i = 0, j = 0; i < 10; i++, j++)
+        sum += i*j;
+}
+```  
+#### 5.4 for/in  
+for/in循环方便地遍历对象  
+```
+for(var i in obj)       //将属性名赋值给变量i
+    console.log(obj[p]);  //输出属性
+```  
+for...in循环遍历的是可枚举对象属性
+#### 5.5 for...of  
+for...of循环可以使用的范围包括数组、Set 和 Map 结构、某些类似数组的对象（比如arguments对象、DOM NodeList 对象）、后文的 Generator 对象，以及字符串  
+```
+const arr = [1,2,3];
+for(let i of arr) console.log(i); //1 2 3
+arr.forEach(function(ele, index){
+    console.log(ele); //1 2 3
+})
+```
+for...of 循环可以替代数组实例的forEach方法
+相比for in 循环只能获取对象键名, for...of循环,遍历获得键值  
+
+### 6. 跳转  
+#### 6.1 标签语句  
+```
+flag: while(exp) {
+    //...
+    continue flag;
+    //break flag;
+    //...
+}
+```  
+#### 6.2 break  
+单独使用break语句的作用是立即退出内层循环或switch语句  
+```
+for(var i = 0; i < a.length; i++) {
+    if(a[i] == target) break;
+}
+//当break和标签一起使用时,程序将跳转到这个标签所标识的语句块的结束, 或者直接终止这个闭合语句块的执行
+break flag; //语句标签
+```  
+#### 6.3 continue  
+使用方法和break相同, 效果是跳转到执行下一次循环  
+```
+//报错机制, 当产生一个错误时跳过当前循环的后续逻辑
+for(let i = 0; i < data.length; i++){
+    if(!data[i]) continue; //不能处理undefined数据
+    sum += data[i];
+}
+
+```
+121
