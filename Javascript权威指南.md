@@ -65,12 +65,14 @@ arr instanceof Object;   //true
     if( a === b ) stop();
     ( a ===b ) && stop();
 ```  
+
 ### 5 赋值表达式  
 a = 5;  //把5赋值给变量a  
 '=' 运算符左操作数是一个左值: 一个变量或者对象属性(或数组元素); 右操作数 为任意值  
 > es6  
 解构赋值  
 let [a,b,c] = [1,2,3];  
+
 ### 6 其他运算符  
 #### 6.1 条件运算符(三目/三元 运算符)  
 a > 0 ? a-- : a++;  
@@ -90,11 +92,13 @@ a > 0 ? a-- : a++;
     2 in arr   //false;
     arr.length    //3 delete没有改变数组长度
 ```  
+
 ## 四. 语句
 条件语句 , 循环语句, 跳转语句  
 ### 1. 表达式语句  
 >>赋值语句 greeting = 'hello' + name;  
 >>函数调用   
+
 ### 2. 复合语句和空语句 
 用花括号将多条语句括起来,连成**复合语句**(compound statement).
 ```
@@ -141,7 +145,7 @@ var(*es6 let const*) 和 function 都是声明语句, 他们声明变量或者�
 
     //递归函数
     function factorial(n) {
-        if(N < 1) return 1;
+        if(n < 1) return 1;
         return n * factorial(n -1);
     }
 ```  
@@ -252,4 +256,93 @@ for(let i = 0; i < data.length; i++){
 }
 
 ```
-121
+#### 6.4 return  
+函数调用是一种表达式, 所有的表达式都有值. 函数中return语句就是就是指定函数调用之后的返回值.在没有return语句时,函数的返回值是undefined.
+
+#### 6.5 throw   
+抛出异常,   
+```
+throw exp;
+
+(function(x){
+    //如果输入参数非法,就抛出一个异常
+    if(x > 0) throw new Error('x不能是正数');
+    return x*12; 
+})(12);
+```  
+解释器会一直向上寻找相关联的异常处理程序.如果没有处理错误的try /catch /finally, JavaScript会把异常当作程序错误来处理,并报告给用户  
+#### 6.6 try / catch / finally 语句  
+>try /catch / finally 是JavaScript的异常处理机制  
+
+try 从句定义了需要处理的异常所在的代码块  
+catch 从句跟在try后面,当try语句块内发生异常,将执行catch内的逻辑  
+finally finally 中的逻辑总是会执行(无论是否有异常)  
+```
+    try {
+        //正常执行时, 这段代码不会产生任何问题  
+        //发生异常时, 用throw语句直接抛出异常  
+        //或者调用一个方法来间接抛出异常
+    }
+    catch (e) {
+        //*当且仅当* try语句抛出异常,才会执行catch  
+        //可以通过局部变量e获得Error对象或抛出的其他值得引用  
+        //可忽略或处理这个异常  
+        //还可以通过throw 重新抛出异常 
+    }
+    finally {
+        //不管try语句是否抛出了异常, 这里的逻辑总是会执行, 终止try语句块的方式有: 
+        // 1) 正常终止, 执行完语句块的最后一条语句  
+        // 2) 通过break, continue或者return 语句
+        // 3) 抛出一个异常, 异常被catch从句捕获
+        // 4) 抛出一个异常, 异常未被捕获, 继续向上传播
+    }
+```
+catch后的圆括号内是一个标识符, 这是一个局部变量
+```
+try {
+    //要求用户输入一个数字
+    var n = Number(prompt('请输入一个正整数', ''));
+    //输入合理, 计算阶乘
+    var f = function factorial(n){
+                if(n <= 1) return n;
+                return n * factorial(n-1);
+            });
+    //显示结果
+    console.log(n + '的阶乘是' + f(n));
+}
+catch (e) {
+    //如果输入不合理, 将执行这里
+    console.log(e) //输出错误信息
+}
+```  
+### 7. 其他语句类型  
+#### 7.1 debugger  
+debugger 语句通常什么都不做.在调试模式下产生一个断点(breakpoint)  
+#### 7.2 'use strict'  
+严格模式  
+- 禁止使用with语句  
+- 变量先声明才能使用,如果对未声明的变量进行赋值操作会报错  
+- 调用函数中的this值是undefined (非严格模式中, 调用函数的this值总是指向全局对象)  
+- call 和 apply 调用函数时, this值就是通过call() 或apply传入的第一个参数  
+- 给只读属性赋值和给不可扩展的对象创建新成员都将抛出一个错误
+- 传入eval()的代码不能调用程序所在的上下文中声明变量或定义函数  
+- delete 运算符后跟非法标识符(变量 函数 函数参数)将会报语法错误异常(非严格 什么也不做, 返回false)
+- 在一个对象直接量中定义两个或多个同名属性将产生一个语法错误
+- 不允许使用八进制整数直接量
+
+### 8. JavaScript语句小结  
+| 语句            | 语法              | 用途            |
+|-----            |:----             |:----            |
+|debugger         | debugger         | 断点调试         |
+|default          | default          | switch默认语句    |
+|empty            | ;                | 什么都不做       |
+|for...in         | for(var in object  )statment| 遍历对象的一个属性|
+|label            | label: statment  | 指定statment名字|
+|return           | return [exp]     | 指定函数返回值   |
+|throw            | throw exp        | 抛出异常        |
+|try              | try{statments} <br> [catch{handler statmens }] <br> [finally {cleanup statments }]   | 捕获异常        |
+|use strict       | 'use strict'     | 对脚本和函数应用严格模式|
+
+## 五. 对象  
+无序属性的集合
+
