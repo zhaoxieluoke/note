@@ -7,11 +7,11 @@ Javascript程序是用Unicode字符集编写的
  字符串  
  布尔值  
  正则表达式  
- null  
+ null 
+
  ## 二. 类型,值和变量  
  >基本类型  
 number string 布尔值 null undefined  
-
  >引用类型  
  数组 对象 函数  
 
@@ -344,5 +344,100 @@ debugger 语句通常什么都不做.在调试模式下产生一个断点(breakp
 |use strict       | 'use strict'     | 对脚本和函数应用严格模式|
 
 ## 五. 对象  
-无序属性的集合
+无序属性的集合.每个属性都是键值对  
+属性名是字符串, 因此我们可以把对象看成是从字符串到值的映射  
+除了保持自有的属性, JavaScript 还可以从原型继承属性. 对象的方法通常是继承的属性, **原型继承是JS的核心特征**  
+JavaScript对象是动态的, 可新增和删除属性  
+除字符串, 数字, true, false, null, undefined外, JavaScript中的值都是对象  
+> 对象常见的用法是创建, 设置, 查找, 删除, 检测, 枚举    
+
+每个属性都有属性特征:
+- 可写, 表明是否可以设置该属性的值  
+- 可枚举, 表明是否可以通过for...in循环返回该属性  
+- 可配置, 表明是否可以删除或修改该属性  
+
+每个对象还拥有三个相关的对象特征:  
+- 对象的原型(prototype)指向另一个对象,本对象的属性继承自它的原型对象
+- 对象的类是(class)一个标识对象类型的字符串
+- 对象的扩展标记(extensible flag) 指明了是否可以向该对象添加新属性  
+
+最后, 我们用下面的这些术语来对三类JavaScript对象和两类属性做区分:
+- 内置对象(native object) ES规范定义的对象或者类. eg,数组, 函数, 日期, 正则表达式都是内置对象 
+- 宿主对象(host object) 由JavaScript解释器所嵌入的宿主环境(如web浏览器)定义的. 客户端JavaScript中表示网页结构的HTMLElement对象均是宿主对象. 既然宿主环境定义的方法可以当成普通的JavaScript函数对象, 那么宿主对象也可以当成内置对象.  
+- 自定义对象(user-defined object) 由运行中JavaScript代码创建的对象  
+- 自有属性(own property) 是直接在对象中定义的属性 
+- 继承属性(inherited property) 是在对象的原型对象中定义的属性  
+
+### 1. 创建对象  
+#### 1.1 对象直接量  
+创建对象最简单的方式就是在JavaScript中使用对象直接量,  
+属性名中可以是字符串直接量(包含空字符串)
+```
+    var obj = {}; //创建一个空对象
+```  
+
+对象直接量是一个表达式,这个表达式的每次运算都创建并初始化一个新的对象.
+#### 1.2 new运算符  
+这里的函数称构造函数,用来初始化一个新对象.原始类型都包含内置对象
+```
+var obj = new Object();
+var arr = new Array();
+var date = new Date();
+var reg = new RegExp('a-z');
+```  
+
+#### 1.3 原型  
+通过对象直接量, 可通过Object.prototype获取对象原型的引用, new运算符,构造函数调用创建的对象的原型就是构造函数的prototype属性的值  
+#### 1.4 Object.create()  
+创建一个对象, 其中第一个参数就是对象的原型  
+Object.create()是一个静态函数, 不提供给某个对象调用的方法.  
+传入原型对象
+```
+    var obj = Object.create({x:1});
+    var obj = Object.create(Object.prototype); //创建一个空对象
+```  
+
+### 2. 属性的查询和设置  
+```
+    //访问 
+    obj.title //访问obj的title属性
+    obj['title']
+    //赋值
+    obj.title = 'sda';
+```  
+
+#### 2.1 作为关联数组的对象  
+object.property  
+object['property']  
+第二种语法访问对象,这个数组元素是通过字符串索引而不是数字索引, 这就是我们所说的关联数组, 也称作散列, 映射或字典. JS对象都是关联数组   
+> 使用数组的写法,更加灵活,可以通把数组索引写成变量来访问  
+
+#### 2.2 继承  
+```
+    var obj = {}; //创建对象obj, 从Object.prototype继承对象的方法
+    obj.x = 1; //定义一个属性x
+    var p = Object.create(obj); //p 继承obj和Object.prototype
+    p.y = 2; //给p定义一个属性y
+    var q = Object.create(p); // q 继承p, Object.prototype
+    q.z = 3;
+    var s = q.toString(); //toString继承自Object.prototype
+    q.x + q.y   //3 , x和y继承自obj和p
+```  
+> 如果对对象obj属性x赋值, 如果obj存在x属性(非继承,即自有属性),赋值操作只改变x值. 如果obj不存在x属性, 那么赋值操作就给obj添加了x属性,如果x属性是继承来的, 那么这个继承的属性x就被新创建的同名属性值所覆盖.  
+**同时并不修改原型对象(如对q的x属性进行赋值操作, 并未影响到obj的x属性值)的属性**
+
+.
+> 只有在查询(访问)属性时才会体会到继承的存在, 设置(赋值操作)属性则和继承无关  
+
+#### 2.3 属性访问错误  
+查询一个不存在的对象属性值返回undefined  
+
+
+
+
+
+
+
+
+
 
