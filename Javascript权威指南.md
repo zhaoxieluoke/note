@@ -631,7 +631,202 @@ Date.valueOf()
 ```  
 
 ### 2. 数组长度  
-每个数组有一个length属性, 这个属性使得数组区别于常规的JavaScript对象.
+每个数组有一个length属性, 这个属性使得数组区别于常规的JavaScript对象.  
+设置数组length属性小于当前长度的非负整数n,当前数组中索引大于或等于n的元素将从数组中删除
+```
+    var arr = [1, 2, 3, 4, 5];
+    arr.length = 3; //arr = [1, 2, 3]
+    arr.length = 0; //arr= [],将数组置空
+
+```  
+
+### 3. 数组元素的添加和删除  
+**push**方法在数组末尾添加一个或多个元素  
+**unshift**在首部插入一个元素  
+**delete** 删除指定的数组元素,但是并不改变数组长度  
+```
+    var arr = [1, 2, 3];
+    delete arr[1];
+    1 in arr  //false
+    arr.length = 3;
+```  
+
+**pop** 从数组末尾删除一个元素, 使数组长度减1,并返回被删除的元素  
+**shift** 从数组首部删除一个元素, 数组长度减1, 返回删除的元素  
+> splice通用的插入, 删除或替换数组元素  
+splice(start, delele, additem1, additem2, ...)
+splice 接受三个及更多参数   
+>    - start 代表起始位置 (无论是添加还是删除)  
+>    - delele 代表要删除的数组元素个数, 从start位置开始算起  
+>    - additem 代表要添加的数组元素  
+
+```
+    var arr = [1, 2, 3];
+    arr.splice(1); // [2,3] 返回被删除元素组成的数组 只传入起始位置则, 从索引值为1元素都被删除
+    arr.splice(1, 123); // delele值大于剩余元素个数,也会把剩余元素都删除
+    arr.splice(1, 0, 1,23); // 删除0个元素, 同时在索引值为1的元素之后插入两个值1, 23
+```  
+
+### 4. 数组遍历  
+forEach(); for...of  
+### 5. 数组方法  
+#### 5.1 join  
+Array.join()将数组中所有元素都转化为字符串拼接在一起,可传入一个参数指定字符串的分隔符, 默认逗号  
+```
+    var arr = [1, 2, 3];
+    arr.join(); //'1,2,3'
+    arr.join('|') // '1|2|3'
+    var arr2 = new Array(10);
+    arr2.join('-'); //'---------'
+```  
+#### 5.2 reverse  
+Array.reverse() 将数组中的元素颠倒,返回逆序数组  
+#### 5.3 sort  
+Array.sort() 将数组排序并返回排序后的数组  
+要按照指定方式排序,则需要给sort传入一个比较函数  
+**排序规则:** 
+> 第一个参数要排在前, 比较函数返回一个小于0的值.  
+反之, 第一个参数在后, 比较函数返回大于0的值  
+如果,两个值相等(无所谓前后), 函数返回0 
+```
+    var arr= [1,23,2,4];
+    arr.sort(function(a, b){
+        return a-b;
+    }) //[1,2,4,23]
+```  
+
+#### 5.4 concat  
+Array.concat() 创建并返回一个新数组  
+arr.concat(4, [5]);  
+#### 5.5 slice  
+Array.slice()方法返回数组的一个片段或子数组  
+```
+    var arr = [1,2,3,4,5];
+    arr.slice(0, 3);  //[1,2,3]
+    arr.slice(3);     //[4,5]
+    arr.slice(1, -1); //[2,3,4]
+    arr.slice(-3, -2); //[3]
+```  
+#### 5.6 forEach  
+遍历数组 Array.forEach(function(ele,index){//...}) 
+#### 5.7 map   
+map()方法调用数组的每个元素传递给指定的函数, 返回一个数组
+#### 5.8 filter  
+filter()方法返回的数组元素是调用的数组的一个子集  
+```
+    var arr = [1, 2, 3, 4, 5];
+    var small = arr.filter(function(x){ return x < 3; }); //[2, 1]
+```  
+
+#### 5.9 every和some  
+every()和some()是数组的逻辑判定: 它们对数组元素应用指定的函数进行判定, 返回true或false  
+```
+    var arr = [1, 2, 3, 4, 5];
+    arr.every(function(x){return x < 10;});  //true 所有值都<10
+    arr.every(function(x){ return x % 2 === 0}); //false 不是所有的值都是偶数
+    //some
+    arr.some(function(x){ return x%2 === 0; }); //true arr包含偶数
+    arr.some(isNaN) //false arr不包含NaN
+```  
+
+#### 5.10 reduce和reduceRight  
+reduce()和reduceRight 方法使用指定的函数将数组元素进行组合,生成单个值。
+```
+    var arr = [1, 2, 3, 4, 5];
+    var sum = arr.reduce(function(x, y){ return x+y;}); //数组求和
+
+```  
+#### 5.11 indexOf和lastIndexOf  
+indexOf()和lastIndexOf()搜索整个数组中指定的元素,返回找到的第一个元素的索引，没找到返回-1， indexOf从头至尾, lastIndexOf从尾至头  
+
+### 6. 数组类型  
+Array.isArray()  
+## 七. 函数  
+### 1. 函数调用  
+- 作为函数
+- 作为方法
+- 作为构造函数
+- 通过call()和apply()方法间接调用  
+#### 1.1 间接调用  
+call() apply()  
+### 2. 作为命名空间的函数  
+```
+    (function(){
+        //模块代码
+    }())
+```  
+
+### 3. 闭包  
+函数对象可以通过作用域链互相关联起来, 函数体内部的变量都可以保存在函数作用域内, 这种特性被叫做'闭包'
+```
+    var scope = 'global scope';  //全局变量
+    function checkscope() { //
+        var scope = 'local scope';  //局部变量
+        function f() {return scope;} //在作用域中返回这个值
+        return f;
+    }
+    checkscope()();  //'local scope'
+```  
+
+.
+```
+    function counter() {
+        var n = 0;
+        return {
+            count: function() {return  n++;},
+            reset: function() {n = 0;}
+        }
+    }
+
+    var c = counter(), d = counter(); //创建两个计数器
+    c.count();  // 0
+    d.count();  // 0 
+    c.reset();  //
+    c.count();  // 0 
+    d.count();  // 1
+```  
+
+### 4. 函数属性, 方法和构造函数  
+#### 4.1 length  
+在函数体内, arguments.length表示传入函数的实参的个数  
+#### 4.2 prototype  
+每个函数都包含一个prototype属性, 这个属性是指向一个对象的引用, 这个对象叫'原型对象'  
+#### 4.3 call和apply  
+call()和apply()的第一个实参是要调用函数的母对象, 它是调用上下文, 在函数体内通过this来获得对它的引用. 想要以对象obj的方法来调用f(),可使用call()和apply()  
+```
+    f.call(obj);
+    f.apply(obj);
+    //
+    f.call(obj,1,2) //以对象obj的方法来调用f(),并传入两个参数1, 2
+    f.aplly(obj,[1,2]) //
+```  
+#### 4.4 bind  
+将函数绑定至某个对象 
+```
+    function f(y){return this.x + y}  //待绑定函数
+    var obj = {x:1}; // 要绑定的对象
+    var g = f.bind(obj); // 通过调用g(x)来调用o.f(x) 
+    g(2) // 3
+    //
+    function bind(f, o){
+        if(f.bind) return f.bind(o);
+        else return function() {
+            return f.apply(o, arguments);
+        }
+    }
+```  
+#### 4.5 Function()构造函数  
+var foo = new Function('x', 'y', 'return x*y;');   
+### 5. 函数式编程  
+
+
+
+
+
+
+
+
+
 
 
 
