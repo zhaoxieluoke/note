@@ -818,6 +818,41 @@ call()和apply()的第一个实参是要调用函数的母对象, 它是调用�
 #### 4.5 Function()构造函数  
 var foo = new Function('x', 'y', 'return x*y;');   
 ### 5. 函数式编程  
+#### 5.1 使用函数处理数组  
+```
+    //使用map和reduce函数来计算平均值和标准差
+    var sum = function(x, y){return x+y};
+    var square = function(x){return x*x};
+    var data = [1,2,3,4,5];
+    var mean = data.reduce(sum)/data.length;
+    var deviations = data.map(function(x){return x-mean;});
+    var stddev = Math.sqrt(deviations.map(square).reduce(sum)/(data.length-1))
+```  
+
+#### 5.2 高阶函数  
+> 高阶函数, 操作函数的函数,接收一个或多个函数作为参数,并返回一个新函数  
+```
+    /* 返回一个新的可以计算的f(g(...))的函数
+     * 返回的函数h()将它所有的实参传入g(), 然后将g()的返回值传入f()
+     * 调用f()和g()时的this值和调用h()
+     *    
+     */
+    function compose(f, g) {
+        return function() {
+            return f.call(this, g.apply(this, arguments));
+        };
+    }
+
+    var square = function(x) {return x*x;};
+    var sum = function(x, y){
+        return x+y;
+    }
+    var squareofsum = compose(square, sum);
+    squareofsum(2, 3)  //
+```  
+#### 5.3 不完全函数  
+
+
 
 
 
