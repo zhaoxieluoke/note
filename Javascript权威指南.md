@@ -439,6 +439,202 @@ object['property']
 delete 运算符可以删除对象的属性。delete只是断开属性和宿主对象的联系， 而不会去操作属性中的属性  
 delete运算符只能删除自有属性， 不能删除继承属性  
 ### 4. 检测属性  
+判断某个属性是否存在某个对象中  
+使用in运算符, hasOwnPreperty()和propertyIsEnumerable()方法来完成  
+>hasOwnPreperty 方法检测给定的名字是否是对象的自有属性.对继承对象将返回false  
+
+.
+>propertyIsEnumerable检测是否是自有属性及是否可枚举  
+
+### 5. 枚举属性  
+- for...in  
+- Object.keys(obj), 返回一个数组,由可枚举的自有属性组成  
+- Object.getOwnPropertyNames(), 返回一个数组, 由自有属性组成  
+### 6. 属性getter和setter  
+对象属性由名字,值和一组特征组成.属性值可以用一个或者两个方法来替代(*getter和setter*), 由getter和setter定义组成的属性称作'存取器属性'(accessor property), 它不同于'数据属性'.  
+
+程序查询存取器属性时, JS调用getter方法(无参数), 这个方法返回的就是属性存取表达式的值. 当程序设置一个存取器属性的时候,JS调用setter方法,将赋值表达式右侧的值当作参数传入setter  
+
+和数据属性不同, 存取器属性不具有可写性.
+如果一个属性同时拥有getter和setter方法, 那么它是一个只读/只写属性,  
+```
+    var obj = {
+        //普通的数据属性
+        data_prop: value,
+        //存取器属性都是成对定义的函数
+        get accessor_prop() {//...},
+        set accessor_prop(value) {//...}
+    }
+    //
+    var serialnum = {
+        $n: 0,
+        get next() {return this.$n++},
+        set next(n) {
+            if(n >= this.$n) this.$n = n;
+            else throw "序列号的值不能比当前值小";
+        }
+    }
+```   
+.
+```
+    //这个对象有一个可以返回随机数的存取器属性
+    //
+    var random = {
+	get octet() {return Math.floor(Math.random()*256);},
+	get uint16() {return Math.floor(Math.random()*65536);},
+	get int16() {return Math.floor(Math.random()*65536)-32768;}
+}
+```  
+
+### 7. 属性的特征  
+除了名称和值之外, 属性还包含了一些标识他们可写, 可枚举和可配置的特性  
+> **数据属性**包含四个特征: 值(value), 可写性(writable), 可枚举性(enumerable), 可配置性(configurable).  
+
+.存取器属性不具有值(value)特性和可写性,它的可写性是由setter方法存在与否决定的
+>  **存取器属性**包含四个特性:  读取(get), 写入(set), 可枚举性, 可配置性  
+
+属性描述符 (这个对象,代表了数据属性/存取器属性的特性), 通过Object.getOwnPropertyDescriptor()可以获取某个对象特定属性的描述符
+```
+    Object.getOwnPropertyDescriptor(random, 'octet')
+    //返回{set:undefined, enumerable:true,configurable: true,get: ƒ octet() }
+```
+
+想设置属性的特性, 需调用Object.definePeoperty()
+```
+    var obj = {};
+    Object.defineProperty(obj, 'x', {
+	value: 1,
+	writable: true,
+	enumerable: false,
+	configurable: true
+})
+``` 
+
+**Object.defineProperty()或Object.defineProperties使用规则** 
+> - 对象不可扩展, 则可编辑已有的自有属性,但不能添加新属性
+> - 属性不可配置, 则不能修改可配置性和可枚举性
+> - 存取器属性不可配置, 则不能修改getter和setter方法, 也不能将其转化为数据属性
+> - 数据属性不可配置, 则不能转换为存取器属性
+> - 数据属性不可配置, 则不能将其可写性从false修改为true, 但可从true改为false
+> - 数据属性不可配置且不可写, 则不能修改它的值. 可配置但不可写属性的值是可以修改的  
+
+```
+    /*
+     *在Object.prototype上添加一个不可枚举的extend()方法
+     *这个方法继承自调用它的对象,将作为参数传入的对象的属性一一复制  
+     *除了值之外, 也复制属性的所有特性, 除非在目标对象中存在同名的属性
+     *参数对象的所有自有对象(包括不可枚举属性)也会一一复制  
+     */
+
+    Object.defineProperty(Object.prototype,
+        'extend',    //定义Object.prototype.extend
+        {
+            writable: true,
+            enumerable: false,  //不可枚举
+            configurable: true,
+            value: function(o) { 
+                //得到所有自有属性
+                var names = Object.getOwnPropertyNames(0);
+                //遍历
+                for(var i= 0; i < names.length; i++){
+                    //如果属性已存在, 跳过
+                    if(names[i] in this) continue;
+                    //获得o中属性的描述符
+                    var desc = Object.getOwnPropertyDescriptor(o, names[i]);
+                    //用他给this创建一个属性
+                    Object.defineProperty(this, names[i], desc);
+                }
+            }
+        }
+    )
+```   
+
+### 8. 对象的三个属性  
+原型(prototype), 类(class), 可扩展性(extensible attribute)  
+#### 8.1 原型属性  
+对象的原型是用来继承属性的  
+要想检测,一个对象是否是另一个对象的原型(或处在原形链中), 请使用isPrototypeOf()  
+```
+    var p = {x: 1};
+    var o = Object.create(p);
+    p.isPrototypeOf(o)  //true p继承自o
+    Object.prototype.isPrototypeOf(o)  //true p继承自object.prototype
+```  
+
+#### 8.2 类属性  
+对象的类属性是一个字符串, 用以表示对象的类型信息  
+调用对象的toString方法,获取对象的类
+
+```
+    function classof(o){
+        if(o === null) return 'Null';
+        if(o === undefined) return 'Undefined';
+        return Object.prototype.toString.call(o).slice(8, -1);
+    }
+    //
+    classof({}) //Object
+```  
+
+#### 8.3 可扩展性  
+对象的可扩展性用以表示是否可以给对象添加新属性  
+所有的内置对象和自定义对象都是显式可扩展的
+用Object.esExtensible() 判断对象是否可扩展  
+若要转换成不可扩展, 需要调用Object.preventExtensions() **不可扩展不可向可扩展转换**  
+Object.Seal 将对象设置为不可扩展,同时将对象的自有属性都设置为不可配置的  
+用Obeject.isSealed()来检测对象是否封闭  
+Object.freeze() 将更严格的锁定对象(*冻结*), 不单将对象设置为不可扩展的和将其属性设置为不可配置的之外, 还将所有的自有数据属性设置为只读
+Object.isFrozen() 检测对象是否冻结  
+```
+    //创建一个封闭对象, 包括一个冻结的原型和一个不可枚举的属性
+    var seal = Object.seal(Object.create(Object.freeze({x: 1}),{y: {value: 2, writable: true}}));
+```  
+
+### 9. 序列化对象  
+> 对象序列化(serialization)是指将对象的状态转换为字符串, 也可将字符串还原为对象  
+
+- JSON.stringify(obj) 将对象的状态转换为字符串 
+- JSON.parse()将字符串还原成对象  
+*都用JSON作为s数据交换格式*, JSON的全称"JavaScript Object Notation"-JavaScript对象表示法
+```
+    var obj = {x: 1, y: {}};
+    var s = JSON.stringify(obj) //
+    var p = JSON.parse(s) //p 是obj的深拷贝
+```  
+
+### 10. 对象方法  
+#### 10.1 toString方法  
+toString方法没有参数, 它讲返回一个表示调用这个方法的对象值的字符串. 在需要将对象转换为字符串的时候, JavaScript都会调用这个方法. 如, 在使用 "+" 连接一个字符串和一个对象时或者在希望使用字符串的方法中使用对象时,都会调用toString();  
+#### 10.2 toLocalString()方法  
+这个方法返回一个表示这个对象本地化字符串. 对Number,Date有定制, 可以用来对数字, 日期和时间做本地化的转换  
+#### 10.3 toJSON()  
+对要执行序列化的对象来说, JSON.stringify()方法会调用toJSON()方法   
+#### 10.4 valueOf()  
+当JavaScript需要将对象转换为某种原始值而非字符串的时候才会调用他
+Date.valueOf()  
+## 六. 数组   
+值的有序集合  
+### 1. 稀疏数组  
+稀疏数组就是包含从0开始的不连续索引的数组。
+如果数组是稀疏的， length属性值大于元素个数  
+```
+    var arr = new Array(5);  //数组没有元素，但是长度是5
+    var a = [];
+    a[1000] = 1; //赋值添加一个元素，但是设置length为1001
+```  
+
+.在数组直接量中省略值时不会创建稀疏数组, 省略的元素在数组中是存在的.值为undefined, 这和数组元素不存在是有区别的, 我们通过in操作符就能看出两者的区别  
+```
+    var arr = [,,,];
+    var arr2 = new Array(3);
+    0 in arr   //true arr在索引0处有一个元素
+    0 in arr2  //false  arr2在索引0处没有元素
+```  
+
+### 2. 数组长度  
+每个数组有一个length属性, 这个属性使得数组区别于常规的JavaScript对象.
+
+
+
 
 
 
