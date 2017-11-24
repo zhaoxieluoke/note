@@ -884,7 +884,7 @@ var foo = new Function('x', 'y', 'return x*y;');
 
 ```
     var f = function() {}; //函数对象
-    s
+    
 
 ```
 
