@@ -854,8 +854,38 @@ var foo = new Function('x', 'y', 'return x*y;');
 
 <!--20171122-->
 
+## 八. 类和模块  
+### 8.1 类和原型  
 
+类的所有实例对象都从同一个原型对象上继承属性  
+### 8.2 类和构造函数  
 
+使用new调用构造函数会自动创建一个新对象  
+调用构造函数一个重要特征是，构造函数的prototype属性被用作新对象的原型  
+这意味着通过一个构造函数创建的所有对象都继承自同一个对象，因此他们是同一个类的成员  
+
+```
+    function Range(from, to) {
+        //存储
+        this.from = from;
+        this.to = to;
+    }
+    // 所有的'子对象'都继承自这个对象
+    Range.prototype = {
+        //
+        includes: (x)=> this.from <= x && x <= this.to;
+    }
+```  
+
+在定义类时 默认首字母大写  
+
+#### 8.2.1 constructor  
+每个javascript函数都自动拥有一个protortype属性,这个属性的值是一个对象, 这个对象包含唯一一个不可枚举属性constructor. constructor属性的值是一个函数对象  
+
+```
+    var f = function() {}; //函数对象
+
+```
 
 
 
