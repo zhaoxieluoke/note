@@ -883,10 +883,55 @@ var foo = new Function('x', 'y', 'return x*y;');
 每个javascript函数都自动拥有一个protortype属性,这个属性的值是一个对象, 这个对象包含唯一一个不可枚举属性constructor. constructor属性的值是一个函数对象  
 
 ```
-    var f = function() {}; //函数对象
-    
+    var F = function() {}; //函数对象
+    var pro = F.protptype; //这是与f相关的原型对象  
+    var cons = pro.constructor; //这是与原型相关联的函数
+    cons === F // true  对于任意函数f.prototype.constructor == F    
+```  
+
+在构造函数的原型中存在预先定义好的constructor属性, 这意味着对象通常继承的constructor均指代他们的构造函数. 由于构造函数是类的'公共标识', 因此这个**constructor属性为函数对象提供了类**  
 
 ```
+    var o = new F(); // 创建F类的一个对象
+    o.constructor === F; // true constructor属性指代这个类 
+```  
+
+在创建类的时候 更多的去使用预定义的原型对象是(而不是重写prototype对象, 重新定义的原型对象同时也需要将constructor属性重新定义), 预定义的原型对象包含constructor属性, 然后依次给原型对象添加方法  
+
+```
+    Range.prototype = {
+        constructor: Range, //
+        includes: function(x) {return this.from <= x && x <= this.to;}
+    };
+    //
+    //扩展预定义的Range.prototype对象, 而不重写之
+    // 这样就自动创建Range.prototype.constructor属性
+    Range.prototype.includes = function(x) { return this.from <= x && x <= this.to;};
+```  
+
+### 8.3 JAVA式的类继承  
+定义类:  
+1. 定义一个构造函数, 并设置初始化新对象的实例属性. 
+2. 给构造函数的prototype对象定义实例的方法. 
+3. 给构造函数定义类字段和类属性. 
+
+### 8.4 类的扩充  
+Javascript中基于原型的继承机制是动态的: 对象从其原型继承属性, 如果创建对象后原型属性发生变化, 也会影响到继承这个原型的所有实例对象. 所以我们可以通过添加新方法来扩充Javascript类  
+可以给数字, 字符串, 数组, 函数等数据类型添加方法  
+
+### 8.5 类和类型  
+检测任意对象类的方法 : instanceof运算符 constructor属性 构造函数名称 
+#### 8.5.1 instanceof 运算符  
+
+```
+    function F() {
+
+    }
+    var f = new F();
+    f instanceof F // true
+```
+
+构造函数是类的公共标识, 但原型是唯一的标识. 尽管instanceof 运算符的右操作数是构造函数, 但实际计算过程是检测了对象的继承关系, 而不是检测创建对象的构造函数  
 
 
 
