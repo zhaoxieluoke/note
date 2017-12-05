@@ -1167,7 +1167,7 @@ RegExp()构造函数带有两个字符串参数, 第二个参数可选. 第一�
 
 ## 十. JavaScript的子集和扩展  
 ### 10.1 JavaScript的子集  
-#### 10.1.1 常量和局部变量  
+### 10.2 常量和局部变量  
 > **const** 定义常量(对常量重新赋值会失败), 对常量重新声明会报错  
 
 ```
@@ -1183,6 +1183,89 @@ RegExp()构造函数带有两个字符串参数, 第二个参数可选. 第一�
 - 在for或者for/in循环中, 作为var的替代  
 - 在语句中定义一个新变量并显式指定他的作用域  
 - 定义一个在表达式内部作用域中的变量, 这个变量只在表达式内部可用  
+
+使用let最简单的方式就是批量去替换程序中的var. 通过let声明的变量只属于就近的花括号括起来的语句块.  
+若在循环体内使用let声明变量, 在循环体外是无法使用这些变量的
+eg.  
+
+```
+    function oddsums(n) {
+        let total = 0, result = [];
+        for (let x = 1; x <= n; x++) {
+            let odd = 2*x - 1;
+            total += odd;
+            result.push(total);
+        }
+        // 此处无法引用odd或是x 
+        return result;
+    }
+```  
+
+> for 循环的特别之处, 设置循环的那一部分是一个父作用域, 而循环体内部是一个单独的子作用域  
+
+### 10.3 解构赋值  
+从一个数组中取得索引的值，或从一个对象中取得属性并手动赋值可以被认为是 结构化赋值  
+等号的右侧是一个结构化的值(数组或对象), 指定左侧一个或多个变量的语法和右侧的数组和对象的语法保持一致  
+在解构赋值时, 如果右边是数值和布尔值, 则会先转换为对象
+
+```
+  //数组
+  let [head, ...tail]  = [1, 2, 3, 4];
+  head  // 1 
+  tail  // [2, 3, 4]
+    //默认值赋值
+    let [a, b = 2, c = 100] = [1, 2]
+  //对象
+  let {a: a, b: b} = {a: 231, b: 321}
+  //字符串
+  const [a,b,c,d,e] = 'hello';
+  a  //h
+  b  //e
+  c  //l
+  d  //l
+  e  //o
+  //数值和布尔值 解构
+  let {toString: s} = 123;
+  s === Number.prototype.toString // true
+
+  let {toString: s} = true;
+  s === Boolean.prototype.toString // true
+
+```  
+
+> 用途  
+> 1. 交换变量的值  
+    let x = 1;  
+    let y = 2;  
+    [x, y] = [y, x];
+> 2. 从函数返回多个值  
+    ```
+        function foo() {
+            return {
+                x: 2,
+                y: 1
+            };
+        }
+        let {a, b} = foo();
+    ```
+> 3. 函数参数定义
+> 4. 提取JSON数据   
+    ```
+        let jsonData = {
+            id: 42,
+            status: "OK",
+            data: [867, 5309]
+        };
+        let { id, status, data: number } = jsonData;
+        console.log(id, status, number);
+        // 42, "OK", [867, 5309]  
+    ```
+> 5. 函数参数的默认值  
+> 6. 遍历map解构
+> 7. 输入模块指定方法  
+
+
+<!-- why i a t m w is?-->  
 
 
 
