@@ -1240,25 +1240,25 @@ eg.
     [x, y] = [y, x];
 > 2. 从函数返回多个值  
     ```
-        function foo() {
-            return {
-                x: 2,
-                y: 1
-            };
-        }
-        let {a, b} = foo();
+        function foo() {  
+            return {  
+                x: 2,  
+                y: 1  
+            };  
+        }  
+        let {a, b} = foo();  
     ```
 > 3. 函数参数定义
 > 4. 提取JSON数据   
     ```
-        let jsonData = {
-            id: 42,
-            status: "OK",
-            data: [867, 5309]
-        };
-        let { id, status, data: number } = jsonData;
-        console.log(id, status, number);
-        // 42, "OK", [867, 5309]  
+        let jsonData = {  
+            id: 42,  
+            status: "OK",  
+            data: [867, 5309]  
+        };  
+        let { id, status, data: number } = jsonData;  
+        console.log(id, status, number);  
+        // 42, "OK", [867, 5309]    
     ```
 > 5. 函数参数的默认值  
 > 6. 遍历map解构
