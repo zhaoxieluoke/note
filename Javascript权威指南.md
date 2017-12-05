@@ -1267,6 +1267,27 @@ eg.
 
 <!-- why i a t m w is?-->  
 
+### 10.4 迭代  
+迭代器(iterator) 生成器 (generator)  
+#### 10.4.1 for/of 循环  
+for...of 循环可遍历数组, Set和Map结构, 某些类数组对象, Generator对象, 字符串
+for...of 本质上就是调用iterator接口产生的遍历器
+```
+    const arr = ['red', 'green', 'blue'];
+
+    for(let v of arr) {
+        console.log(v); // red green blue
+    }
+
+    const obj = {};
+    obj[Symbol.iterator] = arr[Symbol.iterator].bind(arr);
+
+    for(let v of obj) {
+        console.log(v); // red green blue
+    }
+```
+
+for...of循环对象，允许遍历获得键值 
 
 
 
