@@ -1308,9 +1308,38 @@ for...of循环对象，允许遍历获得键值
 
 > ## ------------------ **第二部分 客户端JavaScript** -------------------
 
+JavaScript 如何在Web浏览器中实现
 
+## 十三. Web浏览器中的JavaScript  
+### 13.1 客户端JavaScript  
+window对象是所有客户端JavaScript特性和API的主要接入点.  
+### 13.2 在HTML中嵌入JavaScript  
+- 内联, 放置在`<script>`和`</script>`之间  
+- 放置在由`<script>`标签的src属性指定的外部文件中 
+- 放置在HTML事件处理程序中, 该事件处理程序由onclick或onmousedown这样的HTML属性值指定  
+- 放在一个url中, 这个URL使用特殊的'JavaScript:'协议  
+ 
+编程哲学 unobtrusive JavaScript
+内容(html)和行为(JavaScript)分离
 
+#### 13.2.1 外部文件中的脚本 
+> 通过src 属性方式的优点  
+- 避免了在HTML结构中使用大量的JavaScript代码  
+- 保证了代码的复用性
+- 如果一个文件被多个页面引用, 只需要下载一次, 可以通过使用的第一个页面, 随后的页面可以从浏览器缓存检索它  
 
+在Web浏览器中, '书签' 是一个保存起来的URL. 如果书签是 JavaScript: url, 那么保存的就是一小段脚本, 叫bookmarklet.  
+JavaScript程序的执行有两个阶段, 在第一个阶段, 载入文档内容, 并执行`<script>`标签里的内容.  
+当文档载入完成, 并所有脚本执行完成后, JavaScript执行就进入第二个阶段. 这个阶段是异步的, 并由事件驱动, Web浏览器调用事件处理程序函数, 来响应异步发生的事件.  
+### 13.3 JavaScript程序的执行  
+#### 13.3.1 同步, 异步和延迟的脚本  
+JavaScript 脚本的执行在默认情况下同步和阻塞的. `<script>`标签可以有defer和async属性, 这可以改变脚本的执行方式  
+defer 属性使得浏览器延迟执行脚本, 直至文档的载入和解析完成并可操作.  
+async 属性使得浏览器可以尽快地执行脚本, 而不用在下载脚本时阻塞文档解析.  
+如果两个属性同时有, 浏览器会遵从async并忽略defer  
+
+#### 13.3.2 事件驱动的JavaScript  
+ 
 
 
 
