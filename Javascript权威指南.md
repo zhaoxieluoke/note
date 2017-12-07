@@ -1344,9 +1344,53 @@ async 属性使得浏览器可以尽快地执行脚本, 而不用在下载脚本
 然后注册这个函数, 这样就会在发生的时候调用它.   
 有些事件的目标是文档元素, 他们经常会向上传递给文档树, 这个过程叫做'冒泡'.   
 setTimeout()和setInterval()函数(是window对象的方法, 是客户端JavaScript的全局函数)会在指定的一段时间之后触发指定的函数的调用.  传递给SetTimeout()的函数和事件处理程序的注册不同, 它们通常叫'回调逻辑'而不是'处理程序', 但它们和事件处理程序一样,也是异步的. 
-#### 
+### 13.4 兼容性和互用性  
+#### 13.4.1 IE中的条件注释  
 
+```
+    <!--[if IE]> 所有的IE可识别 <![endif]-->
+    <!--[if IE 6]> 仅IE6可识别 <![endif]-->
+    <!--[if lt IE 6]> IE6以及IE6以下版本可识别 <![endif]-->
+    <!--[if gte IE 6]> IE6以及IE6以上版本可识别 <![endif]-->
+    <!--[if IE 7]> 仅IE7可识别 <![endif]-->
+    <!--[if lt IE 7]> IE7以及IE7以下版本可识别 <![endif]-->
+    <!--[if gte IE 7]> IE7以及IE7以上版本可识别 <![endif]-->
+    <!--[if IE 8]> 仅IE8可识别 <![endif]-->
+    <!--[if IE 9]> 仅IE9可识别 <![endif]-->
+```  
 
+### 13.5 安全性  
+Web浏览器中包含JavaScript 解释器, 一旦载入web页面, 就可以让任意的JavaScript代码在计算机中执行.  
+#### 13.5.1 JavaScript 不能做什么  
+客户端JavaScript 没有任何通用的网络能力.  
+客户端JavaScript程序可以对HTTP协议编程, 并HTML5有一个附属协议标准叫WebSockets, 定义了一个类套接字的API, 用于和指定的服务器通信.  
+#### 13.5.2 同源策略  
+脚本只能读取和所属文档来源相同的窗口和文档的属性  
+文档的来源包含协议,主机, 以及载入文档的URL端口.  
+#### 13.5.3 跨站脚本  
+跨站脚本(Cross-site scripting), 或叫做XSS, 这个术语用来表示一类安全问题, 也就是攻击者向目标Web站点注入HTML标签或是脚本.   
+通常, 防止XSS攻击的方式是, 在使用任何不可信的数据来动态的创建文档内容之前, 从中移除HTML标签.  
+将字符串中的HTML标签进行转义和过滤删除,转换成对应的HTML实体  
+name = name.replace(/</g, '&lt;').replace(/>/g, '&gt;');  
+
+## 十四. Window对象  
+***介绍Window对象的属性和方法***  
+### 14.1 计时器  
+setTimeout()和setInterval()可以用来注册在指定的时间之后单次或重复调用的函数.  
+他们都是客户端JavaScript中重要的全局函数, 所以定义为Window对象的方法.  
+setTimeout()返回一个值, 这个值可以传递给clearTimeout()用于取消这个函数的执行.  
+setInterval()返回一个值, 这个值可以传递给clearInterval()用于取消这个函数的执行. 
+
+### 14.2 浏览器定位和导航  
+Window的location属性引用的是Location对象, 它表示该窗口中当前显示的文档的URL, 并定义了方法来使窗口载入新的文档  
+
+#### 14.2.1 解析URL  
+Location对象的href属性是一个字符串, 包含URL的完整文本.  
+location.toString()方法返回href属性的值, 因此在会隐式调用toString()的情况下, 可以使用location代替location.href.  
+Location对象的hash和search属性比较有趣. 如果有的话, hash属性返回URL中的'片段标识符'部分. search属性也类似, 它返回的是问号之后的URL, 这部分通常是某种类型的查询字符串. 
+#### 14.2.2 载入新的文档  
+location.assign()可使窗口载入并显示指定的URL中的文档  
+location.replace()类似, 但在载入新文档之前会从浏览历史中把当前文档删除
 
 
 
