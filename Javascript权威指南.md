@@ -1409,7 +1409,7 @@ Window对象的Screen属性引用Screen对象, 它提供有关窗口显示的大
 alert(), confirm(), prompt()  
 
 ### 14.6 错误处理  
-
+Window的onerror属性是个事件处理程序, 当未捕获的异常传播到调用栈上时就调用它. 
 
 
 
