@@ -1390,7 +1390,26 @@ location.toString()方法返回href属性的值, 因此在会隐式调用toStrin
 Location对象的hash和search属性比较有趣. 如果有的话, hash属性返回URL中的'片段标识符'部分. search属性也类似, 它返回的是问号之后的URL, 这部分通常是某种类型的查询字符串. 
 #### 14.2.2 载入新的文档  
 location.assign()可使窗口载入并显示指定的URL中的文档  
-location.replace()类似, 但在载入新文档之前会从浏览历史中把当前文档删除
+location.replace()类似, 但在载入新文档之前会从浏览历史中把当前文档删除  
+
+### 14.3 浏览历史  
+Window对象的history属性引用的是该窗口的History对象.  
+History对象的back()和forward()方法与浏览器的'后退'和'前进'一样: 他们可以使浏览器在浏览历史中前后跳转.  
+### 14.4 浏览器和屏幕信息  
+Window对象的navigator 和screen 属性  
+#### 14.4.1 Navigator对象  
+navigator.userAgent,获取浏览器信息及系统信息  
+appname Web浏览器全称  
+appVersion 浏览器厂商和版本信息的详细字符串  
+userAgent  浏览器在USER-AGENT HTTP头部中发送的字符串. 这个属性一般包含appVersion中的所有信息, 并且通常也可能包含其他的细节. 由于这个属性通常包含绝大部分信息, 因此浏览器探嗅代码通常用它来探嗅  
+platform  在其上运行浏览器的操作系统  
+#### 14.4.2 Screen对象  
+Window对象的Screen属性引用Screen对象, 它提供有关窗口显示的大小和可用的颜色数量的信息.   
+### 14.5 对话框  
+alert(), confirm(), prompt()  
+
+### 14.6 错误处理  
+
 
 
 
