@@ -1575,6 +1575,61 @@ complete /完成
 |mouseenter |   类似mouseover，但不冒泡。IE将其引入，HTML5将其标准化，但尚未广泛实现|
 |mouseleave|    类似mouseout，但不冒泡。IE将其引入，HTML5将其标准化，但尚未广泛实现|
 
+### 17.6 鼠标滚轮事件  
+onmousewheel  
+### 17.7 拖放事件  
+拖放
+拖放是一种常见的特性，即抓取对象以后拖到另一个位置。
+包含两个事件集, 一个在拖放源上触发, 另一个在拖放目标上触发.
+在拖拽目标上,拖拽开始事件(dragstart),存储 dataTransfer.setData('text', ev.target.innerHTML)指定当前可用的拖放数据源(和数据类型).
+拖拽到目标元素上时dragover事件, 使用preventDefault()阻止默认处理事件  
+放置事件drop, 获取dataTransfer.getData('text');  
+
+### 17.8 文本事件  
+keydown  
+keypress
+
+### 17.9 键盘事件  
+
+## 十八. 脚本化HTTP  
+### 18.1 使用XMLHttpRequest  
+浏览器在XMLHttpRequest类上定义了HTTP API. 这个类的每个实例都表示一个独立的请求/响应对.  
+实例化XMLHttpRequest对象  
+var request = new XMLHttpRequest();  
+
+一个HTTP请求由4个部分组成:  
+- HTTP请求方法或'动作'  
+- 正在请求的URL 
+- 一个可选的请求头集合, 其中可能包含身份验证信息
+- 一个可选的请求主体
+
+服务器返回的HTTP请求包含3部分:  
+- 一个数字和文字组成的状态码, 用来显示请求的成功和失败  
+- 一个响应头集合
+- 响应主体
+
+```
+    //创建一个HTTP请求
+    function(type, url, callback) {
+        var request = new XMLHttpRequest(); //创建请求对象
+        request.open(type, url); //指定请求方式和地址
+        if(type == 'post'){
+            //post请求需要设置'Content-Type'头指定请求主题的MIME类型
+            request.setRequestHeader('Content-type', 'text/plain; charset = UTF-8'); //设置请求头
+        }
+        
+        request.onreadystatechange = function() { 
+            if(request.readystate = 4 && request.status == 200) {
+                callback(request.responseText); //回调函数处理返回数据
+            }
+        } //定义事件处理程序
+
+        request.send(); //发送请求
+    }
+```
+### 十九. jQuery类库  
+### 二十一. 多媒体和图形编程  
+
 
 
 
