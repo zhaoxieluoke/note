@@ -1522,7 +1522,58 @@ keydown和keyup是低级键盘事件, 无论何时按下或释放按键(甚至�
 音频(audio)和视频(video)  
 拖拽(Drag和drop)  
 
+#### 17.1.4 触摸屏和移动设备事件  
 
+### 17.2 注册事件处理程序  
+将事件处理程序传递给对象或元素的一个方法. 对于通过方法调用的处理程序注册, 有一个标准方法, 命名为addEventListener().  
+#### 17.2.1 设置JavaScript对象属性为事件处理程序  
+onclick, onchange, onload, onmouseover  
+```
+    var ele = document.getElementById(id);
+    ele.onclick = function() {//...};
+```  
+#### 17.2.2 addEventListener()  
+使用这个方法可以为事件目标注册事件处理程序.
+addEventListener()接收三个参数. 第一个要注册处理程序的事件类型, 第二个事件发生时调用函数, 第三个布尔值;通常为false, true则允许捕获.  
+```
+    <button id="mybutton">click</button>
+    <script>
+        var b = document.getElementById('mybutton');
+        b.addEventListener('click', function(){console.log(1)}, false);
+        //
+    </script>
+```  
+能够多次调用addEventListener()为同一个对象注册同一事件类型的多个事件处理程序函数. **当对象上发生事件时,所有该事件类型的注册处理程序都会按照注册的顺序调用**. 
+removeEventListener()和addEventListener()相对应, 同样有三个参数, 从对象中删除事件处理程序函数  
+常用于临时注册事件处理程序, 然后不就删除.  
+例如, 要获取mousedown事件时, 可以为mousemove和mouseup事件注册临时捕获事件处理程序来看看用户是否拖动鼠标. 当mouseup事件到来后, 可以注销这些事件处理程序. 
+```
+    document.removeEventListener('mousemove', handleMouseMove, true);
+    document.removeEventListener('mouseup', handleMouseUp, true);
+```  
+
+### 17.3 事件处理程序的调用  
+#### 17.3.1 事件取消  
+支持addEventListener()的浏览器中, 可通过调用事件对象的preventDefault()方法取消事件的默认操作.   
+### 17.4 文档加载事件  
+document.readyState属性随文档加载过程而变.   
+loading /加载  document(文档)正在加载  
+interactive /互动  文档已经被解析, 但是诸如图像, 样式表和框架之类的子资源仍在加载  
+complete /完成  
+
+### 17.5 鼠标事件  
+|事件|含义|
+|--|--|
+|click|         当用户按下并释放鼠标按键或其他方式“激活”元素时触发|
+|contextmenu|   可以取消的事件，当上下文菜单即将出现时触发。当前浏览器在鼠标右击时显示上下文菜单|
+|dblclick|      当用户双击鼠标时触发|
+|mousedown|     当用户按下鼠标按键时触发|
+|mouseup       |当用户释放鼠标按键时触发|
+|mousemove     |当用户移动鼠标时触发|
+|mouseover    | 当鼠标进入元素时触发。relatedTarget(在IE中是fromElement)指的是鼠标来自的元素|
+|mouseout    |  当鼠标离开元素时触发。relatedTarget(在IE中是toElement)指的是鼠标要去往的元素|
+|mouseenter |   类似mouseover，但不冒泡。IE将其引入，HTML5将其标准化，但尚未广泛实现|
+|mouseleave|    类似mouseout，但不冒泡。IE将其引入，HTML5将其标准化，但尚未广泛实现|
 
 
 
