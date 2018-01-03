@@ -641,7 +641,7 @@ Date.valueOf()
     arr.length = 0; //arr= [],将数组置空
 
 ```  
-
+   
 ### 3. 数组元素的添加和删除  
 **push**方法在数组末尾添加一个或多个元素  
 **unshift**在首部插入一个元素  
@@ -1626,7 +1626,8 @@ var request = new XMLHttpRequest();
 
         request.send(); //发送请求
     }
-```
+```   
+
 ### 十九. jQuery类库  
 ### 二十一. 多媒体和图形编程  
 
